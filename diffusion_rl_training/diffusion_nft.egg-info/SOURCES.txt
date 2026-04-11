@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+diffusion_nft.egg-info/PKG-INFO
+diffusion_nft.egg-info/SOURCES.txt
+diffusion_nft.egg-info/dependency_links.txt
+diffusion_nft.egg-info/requires.txt
+diffusion_nft.egg-info/top_level.txt

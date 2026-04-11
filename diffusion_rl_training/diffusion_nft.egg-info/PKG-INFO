@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: diffusion-nft
+Version: 0.0.1
+Requires-Python: >=3.10
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: ipython==8.34.0; extra == "dev"
+Requires-Dist: black==24.2.0; extra == "dev"
+Requires-Dist: pytest==8.2.0; extra == "dev"
+Dynamic: license-file
+Dynamic: provides-extra
+Dynamic: requires-python
