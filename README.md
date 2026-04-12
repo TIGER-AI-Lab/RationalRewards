@@ -1,157 +1,179 @@
-# RationalRewards: Reasoning Rewards Scale Visual Generation at Both Training and Test Time
+# RationalRewards: Reasoning Rewards Scale Visual Generation at both Training and Test Time
 
-RationalRewards is a reasoning-based reward model and toolkit for visual generation.  
-It supports both:
+<div align="center">
+  <a href="#">
+    <img src="https://img.shields.io/badge/Paper-Coming%20Soon-B31B1B?style=flat-square&logo=arxiv&logoColor=white" alt="Paper (Coming Soon)">
+  </a>
+  <a href="https://tiger-ai-lab.github.io/RationalRewards/">
+    <img src="https://img.shields.io/badge/Project%20Page-0A66C2?style=flat-square&logo=googlechrome&logoColor=white" alt="Project Page">
+  </a>
+  <a href="https://github.com/TIGER-AI-Lab/RationalRewards">
+    <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub">
+  </a>
+  <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I">
+    <img src="https://img.shields.io/badge/Model%20(T2I)-FFD966?style=flat-square&logo=huggingface&logoColor=black" alt="Model (T2I)">
+  </a>
+  <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">
+    <img src="https://img.shields.io/badge/Model%20(Edit)-FFD966?style=flat-square&logo=huggingface&logoColor=black" alt="Model (Edit)">
+  </a>
+  <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData">
+    <img src="https://img.shields.io/badge/SFT%20Dataset-FFB7B2?style=flat-square&logo=huggingface&logoColor=black" alt="SFT Dataset">
+  </a>
+  <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench">
+    <img src="https://img.shields.io/badge/Eval%20Dataset-FFB7B2?style=flat-square&logo=huggingface&logoColor=black" alt="Eval Dataset">
+  </a>
+  <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData">
+    <img src="https://img.shields.io/badge/Diffusion%20RL%20Training%20Dataset-FFB7B2?style=flat-square&logo=huggingface&logoColor=black" alt="Diffusion RL Training Dataset">
+  </a>
+</div>
 
-- **train-time optimization** (RL with structured, interpretable reward feedback), and
-- **test-time optimization** (Generate-Critique-Refine prompt revisions without parameter changes).
+RationalRewards is a reasoning-based reward model and toolkit for visual generation. Instead of reducing preference into one opaque scalar, it generates explicit multi-dimensional critiques before scoring, turning reward models from passive evaluators into active optimization interfaces.
 
-[Project Page](https://tiger-ai-lab.github.io/RationalRewards/) | [RationalRewards-T2I](https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I) | [RationalRewards-Edit](https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit) | [RationalRewards-SFT-Data](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData) | [Diffusion RL Training Data](https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData)
+The same model supports both:
+- **train-time optimization** through RL with structured, interpretable reward signals, and
+- **test-time optimization** through a Generate-Critique-Refine loop without parameter updates.
 
-## 📣 News
+We currently release **three datasets** spanning the full pipeline:
+1. **SFT training data** for reward model supervision.
+2. **Preference evaluation data** for benchmark-level pairwise comparison.
+3. **Diffusion RL training data** for train-time optimization.
 
-- **[2026/04]** RationalRewards code release: SFT, reward-model evaluation, Diffusion RL with RationalRewards, and test-time prompt tuning.
-- **[2026/04]** RationalRewards-8B reward models and public datasets are available on Hugging Face.
-- **[Coming Soon]** Paper preprint and FlowFactory supports on other RL methods.
+## Key Results
 
-## 💥 Introduction
-
-Most reward models for visual generation reduce rich human preferences into a single scalar score.  
-RationalRewards instead generates **multi-dimensional critiques before scoring**, enabling:
-
-- denser and more interpretable reward signals for RL, and
-- post-hoc prompt refinement through a **Generate-Critique-Refine** loop.
-
-To avoid expensive rationale annotation, we use **Preference-Anchored Rationalization (PARROT)** to recover high-quality rationales from preference data through anchored generation, consistency filtering, and distillation.
-
-In our experiments, RationalRewards achieves state-of-the-art preference prediction among open-source reward models, improves diffusion RL training for both text-to-image and editing, and delivers strong test-time prompt tuning gains. Surprisingly, test-time prompt tuning can achieve gains that match or even surpass parameter tuning gains. 
-
-**This reveals a critical finding:** the visual generators possess dormant rendering capabilities, which leaves substantial room for improvement via prompt-space optimization.
-
+Instantiated via PARROT on a Qwen3-VL-Instruct-8B backbone, RationalRewards achieves state-of-the-art preference prediction among open-source reward models and remains competitive with Gemini-2.5-Pro. As an RL reward, it consistently improves generators beyond scalar baselines across both text-to-image and image-editing tasks. Most interestingly, RationalRewards' test-time prompt tuning, requiring no parameter updates, matches or exceeds RL-based fine-tuning on several benchmarks.
 
 ![RationalRewards teaser](assets/teaser.png)
 
 *Train-time RL and test-time prompt tuning with RationalRewards across visual generation benchmarks.*
 
+## Why Reasoning Rewards?
 
-## ✨ Features
+Most reward models collapse instruction following, visual quality, composition, and plausibility into one scalar. This removes the structure of human judgment and often leads to brittle optimization. RationalRewards keeps those dimensions explicit so generators receive semantically grounded feedback about what to fix and why.
 
-- **Reasoning reward model:** critique-then-score instead of scalar-only scoring.
-- **Unified pipeline:** includes SFT, pairwise evaluation, RL training, and test-time prompt tuning.
-- **Train-time + test-time optimization:** works in both parameter space and prompt space.
+![RationalRewards usage overview](assets/usage.png)
 
-## 📋 Table of Contents
+*RationalRewards supports optimization in both parameter space (RL) and prompt space (test-time refinement).*
 
-- [🛠 Environment Setup](#-environment-setup)
-- [🚀 Quick Start](#-quick-start)
-- [🔬 Evaluation and Benchmarks](#-evaluation-and-benchmarks)
-- [📦 Public Datasets and Models](#-public-datasets-and-models)
-- [🧪 Repository Structure](#-repository-structure)
-- [🙏 Acknowledgements](#-acknowledgements)
-- [📚 Citation](#-citation)
+## Method: Preference-Anchored Rationalization (PARROT)
 
-## 🛠 Environment Setup
+Human rationale annotation is expensive. PARROT recovers high-quality rationale supervision from preference-only data in three phases:
+1. **Anchored generation:** a teacher VLM proposes rationale candidates consistent with known labels.
+2. **Consistency filtering:** hallucinated or non-predictive rationales are removed.
+3. **Distillation:** a student model learns to critique-before-score without seeing labels.
+
+This gives a practical path from abundant preference datasets to scalable reasoning supervision.
+
+![PARROT pipeline](assets/method.png)
+
+*PARROT pipeline: anchored rationale generation, consistency filtering, and distillation.*
+
+## Empirical Evidence
+
+RationalRewards strengthens both alignment quality and downstream optimization.
+
+![Preference prediction results](assets/preferencepred.png)
+
+*State-of-the-art preference prediction among open-source reward models.*
+
+![Reward hacking analysis](assets/rewardhack.png)
+
+*Structured critique channels reduce shortcut exploitation compared with scalar-only rewards.*
+
+![Test-time prompt tuning results](assets/testtime.png)
+
+*Generate-Critique-Refine at test time can match or exceed RL fine-tuning on several benchmarks.*
+
+![Additional use cases](assets/moreusage.png)
+
+*Additional qualitative use cases enabled by explicit reasoning feedback.*
+
+## News
+
+- **[2026/04]** RationalRewards code release: SFT, reward-model evaluation, diffusion RL with RationalRewards, and test-time prompt tuning.
+- **[2026/04]** RationalRewards-8B reward models and public datasets are available on Hugging Face.
+- **[Coming Soon]** Paper preprint and FlowFactory support for additional RL methods.
+
+## Environment Setup
 
 We recommend Linux + CUDA GPUs with **separate Python environments** for each module.
 
-This repository builds on the following upstream projects:
-
-- [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) (SFT training)
-- [vLLM](https://github.com/vllm-project/vllm) (reward-model serving)
-- [Edit-R1](https://github.com/PKU-YuanGroup/Edit-R1) (RL training environment conventions)
-- [DiffusionNFT](https://github.com/NVlabs/DiffusionNFT) (diffusion RL design references)
-- [diffusers](https://github.com/huggingface/diffusers) (inference/training ecosystem)
+This repository builds on:
+- [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) for SFT
+- [vLLM](https://github.com/vllm-project/vllm) for reward-model serving
+- [Edit-R1](https://github.com/PKU-YuanGroup/Edit-R1) for RL environment conventions
+- [DiffusionNFT](https://github.com/NVlabs/DiffusionNFT) for diffusion RL design references
+- [diffusers](https://github.com/huggingface/diffusers) for inference and training ecosystem support
 
 Install upstream dependencies first:
-
 1. SFT setup: [LLaMA-Factory Installation](https://github.com/hiyouga/LLaMA-Factory#installation)
 2. Reward serving setup: [vLLM Installation](https://github.com/vllm-project/vllm)
 3. RL setup: [Edit-R1 Environment Setup](https://github.com/PKU-YuanGroup/Edit-R1#-environment-set-up)
 
-Then follow module-level READMEs for exact command dependencies:
-
+Then follow module-level READMEs:
 - `rationalrewards_sft/README.md`
 - `reward_model_evaluation/README.md`
 - `diffusion_rl_training/README.md`
 - `test_time_prompt_tuning/README.md`
 
-## 🚀 Quick Start
+## Quick Start
 
-**Please refer to readme in the individual folders for details.** All scripts are environment-variable driven. Replace `/path/to/...` placeholders with your local paths.
+All scripts are environment-variable driven. Replace `/path/to/...` placeholders with local paths.
 
-### Step 1: Train RationalRewards with SFT
-
+### 1) Train RationalRewards with SFT
 ```bash
 bash rationalrewards_sft/run_sft.sh
 ```
 
-### Step 2: Start reward-model server (required before evaluation)
-
+### 2) Start reward-model server
 ```bash
 vllm serve /path/to/rationalrewards_checkpoint --port 6868
 ```
 
-### Step 3: Run pairwise reward-model evaluation
-
+### 3) Run pairwise reward-model evaluation
 ```bash
 bash reward_model_evaluation/run_evaluation.sh
 ```
 
-### Step 4: Run diffusion RL training with RationalRewards feedback
-
+### 4) Run diffusion RL training with RationalRewards feedback
 ```bash
 bash diffusion_rl_training/run_rl_training.sh
 ```
 
-### Step 5: Run test-time prompt tuning (Generate-Critique-Refine)
-
+### 5) Run test-time prompt tuning (Generate-Critique-Refine)
 ```bash
 bash test_time_prompt_tuning/run_test_time_tuning.sh
 ```
 
-## 🔬 Evaluation and Benchmarks
+## Public Models and Datasets
 
-Released evaluation data covers benchmark families including:
+- Reward model (T2I): [TIGER-Lab/RationalRewards-8B-T2I](https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I)
+- Reward model (Edit): [TIGER-Lab/RationalRewards-8B-Edit](https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit)
+- SFT training data: [TIGER-Lab/RationalRewards-SFTData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData)
+- Preference evaluation data: [TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench)
+- RL training data: [TIGER-Lab/RationalRewards_DiffusionNFT_TrainData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData)
 
-- [GenAI-Bench](https://github.com/TIGER-AI-Lab/GenAI-Bench)
-- [Multimodal RewardBench 2](https://github.com/facebookresearch/MMRB2)
-- [EditReward-Bench](https://github.com/TIGER-AI-Lab/EditReward)
+## Repository Structure
 
-We uploaded the cleaned Preference evaluation data we use: [TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench)
+- `rationalrewards_sft/`: SFT training for RationalRewards.
+- `reward_model_evaluation/`: pairwise reward inference and aggregation.
+- `diffusion_rl_training/`: diffusion RL training with RationalRewards signals.
+- `test_time_prompt_tuning/`: critique-guided inference-time prompt refinement.
 
-## 📦 Public Datasets and Models
+## Acknowledgements
 
-- SFT training data for Reward Model Training: [TIGER-Lab/RationalRewards-SFTData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData)
-- RL training data for diffusion RL training: [TIGER-Lab/RationalRewards_DiffusionNFT_TrainData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData)
-We collect the dataset by performing difficulty-aware stratified sampling.
-- RationalRewards (T2I): [TIGER-Lab/RationalRewards-8B-T2I](https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I)
-- RationalRewards (Edit): [TIGER-Lab/RationalRewards-8B-Edit](https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit)
-
-## 🧪 Repository Structure
-
-- `rationalrewards_sft/`: train RationalRewards via SFT.
-- `reward_model_evaluation/`: run pairwise inference and aggregate accuracy.
-- `diffusion_rl_training/`: RL train diffusion generators with RationalRewards reward feedback.
-- `test_time_prompt_tuning/`: improve outputs at inference with critique-guided prompt refinement.
-- `DATASETS_PLACEHOLDER.md`: dataset notes and schema references.
-
-## 🙏 Acknowledgements
-
-RationalRewards is built on top of open-source projects and communities, especially:
-
+RationalRewards is built with and inspired by open-source projects, especially:
 - [DiffusionNFT](https://github.com/NVlabs/DiffusionNFT)
 - [Edit-R1](https://github.com/PKU-YuanGroup/Edit-R1)
 - [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)
 - [diffusers](https://github.com/huggingface/diffusers)
 - [vLLM](https://github.com/vllm-project/vllm)
 
-## 📚 Citation
+## Citation
 
 ```bibtex
 @article{rationalrewards2026,
-  title   = {Think Before You Score: Reasoning Rewards Scale Visual
-Generation at both Training and Test Time},
-  author  = {Haozhe Wang, Cong Wei, Weiming Ren, Jiaming Liu, Fangzhen Lin, Wenhu Chen},
+  title   = {Think Before You Score: Reasoning Rewards Scale Visual Generation at both Training and Test Time},
+  author  = {Haozhe Wang and Cong Wei and Weiming Ren and Jiaming Liu and Fangzhen Lin and Wenhu Chen},
   journal = {arXiv preprint},
   year    = {2026}
 }
