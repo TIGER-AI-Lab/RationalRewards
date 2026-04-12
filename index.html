@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RationalRewards</title>
+    <meta
+      name="description"
+      content="RationalRewards: reasoning-based reward models for visual generation."
+    />
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <h1>RationalRewards</h1>
+        <p class="subtitle">
+          Reasoning Rewards Scale Visual Generation at both Training and Test Time
+        </p>
+        <p class="tagline">
+          From scalar scoring to critique-then-score optimization in both
+          parameter space and prompt space.
+        </p>
+        <div class="links">
+          <a href="https://tiger-ai-lab.github.io/RationalRewards/">Project Page</a>
+          <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I">Model (T2I)</a>
+          <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">Model (Edit)</a>
+          <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData">SFT Data</a>
+          <a href="https://github.com/TIGER-AI-Lab/RR_release">Code</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Abstract</h2>
+        <p>
+          Most reward models for visual generation reduce rich human judgments
+          to a single unexplained score, discarding the reasoning that
+          underlies preference. RationalRewards produces explicit,
+          multi-dimensional critiques before scoring, enabling two complementary
+          optimization pathways: train-time RL with interpretable, fine-grained
+          rewards and test-time Generate-Critique-Refine prompt updates without
+          parameter changes.
+        </p>
+        <p>
+          To avoid costly rationale annotation, we introduce
+          <strong>Preference-Anchored Rationalization (PARROT)</strong>, a
+          framework that recovers high-quality rationales from preference data
+          via anchored generation, consistency filtering, and distillation.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Teaser Figure</h2>
+        <div class="figure-placeholder">
+          Add teaser image to <code>static/teaser.png</code> and update this
+          block if needed.
+        </div>
+        <!--
+          <img src="static/teaser.png" alt="RationalRewards teaser" />
+        -->
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h3>Key Ideas</h3>
+          <ul>
+            <li>Critique-then-score reward modeling</li>
+            <li>Interpretable reward signals for diffusion RL</li>
+            <li>Generate-Critique-Refine at test time</li>
+            <li>PARROT for rationale supervision from preference data</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I">RationalRewards-8B-T2I</a></li>
+            <li><a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">RationalRewards-8B-Edit</a></li>
+            <li><a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench">Evaluation Dataset</a></li>
+            <li><a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData">RL Training Dataset</a></li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="card">
+        <h2>Coming Soon</h2>
+        <ul>
+          <li>Paper PDF and citation details</li>
+          <li>Benchmark tables and per-benchmark links</li>
+          <li>More qualitative examples and failure cases</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>RationalRewards © 2026</p>
+      </div>
+    </footer>
+  </body>
+</html>

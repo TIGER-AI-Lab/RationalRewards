@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local preview helpers
+.cache/
