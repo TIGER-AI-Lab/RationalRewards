@@ -6,7 +6,8 @@
     <title>RationalRewards</title>
     <meta
       name="description"
-      content="RationalRewards: reasoning-based reward models for visual generation."
+      content="RationalRewards: Reasoning Rewards Scale Visual Generation at
+      both Training and Test Time"
     />
     <link rel="stylesheet" href="static/style.css" />
   </head>
@@ -15,18 +16,63 @@
       <div class="container">
         <h1>RationalRewards</h1>
         <p class="subtitle">
-          Reasoning Rewards Scale Visual Generation at both Training and Test Time
+          RationalRewards: Reasoning Rewards Scale Visual Generation at
+          both Training and Test Time
         </p>
         <p class="tagline">
-          From scalar scoring to critique-then-score optimization in both
-          parameter space and prompt space.
+          A reasoning-based reward model that critiques before scoring and
+          enables optimization in both parameter space (RL) and prompt space
+          (Generate-Critique-Refine).
         </p>
-        <div class="links">
-          <a href="https://tiger-ai-lab.github.io/RationalRewards/">Project Page</a>
-          <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I">Model (T2I)</a>
-          <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">Model (Edit)</a>
-          <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData">SFT Data</a>
-          <a href="https://github.com/TIGER-AI-Lab/RR_release">Code</a>
+        <div class="badge-links">
+          <a href="#citation">
+            <img
+              src="https://img.shields.io/badge/Paper-Citation-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white"
+              alt="Paper (Coming Soon)"
+            />
+          </a>
+          <a href="https://tiger-ai-lab.github.io/RationalRewards/">
+            <img
+              src="https://img.shields.io/badge/Project%20Page-0A66C2?style=for-the-badge&logo=googlechrome&logoColor=white"
+              alt="Project page"
+            />
+          </a>
+          <a href="https://github.com/TIGER-AI-Lab/RationalRewards">
+            <img
+              src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white"
+              alt="GitHub repository"
+            />
+          </a>
+          <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I">
+            <img
+              src="https://img.shields.io/badge/Model%20(T2I)-FFD966?style=for-the-badge&logo=huggingface&logoColor=black"
+              alt="T2I model"
+            />
+          </a>
+          <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">
+            <img
+              src="https://img.shields.io/badge/Model%20(Edit)-FFD966?style=for-the-badge&logo=huggingface&logoColor=black"
+              alt="Edit model"
+            />
+          </a>
+          <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData">
+            <img
+              src="https://img.shields.io/badge/SFT%20Dataset-FFB7B2?style=for-the-badge&logo=huggingface&logoColor=black"
+              alt="SFT dataset"
+            />
+          </a>
+          <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench">
+            <img
+              src="https://img.shields.io/badge/Eval%20Dataset-FFB7B2?style=for-the-badge&logo=huggingface&logoColor=black"
+              alt="Evaluation dataset"
+            />
+          </a>
+          <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData">
+            <img
+              src="https://img.shields.io/badge/RL%20Training%20Data-FFB7B2?style=for-the-badge&logo=huggingface&logoColor=black"
+              alt="Diffusion RL training dataset"
+            />
+          </a>
         </div>
       </div>
     </header>
@@ -37,65 +83,215 @@
         <p>
           Most reward models for visual generation reduce rich human judgments
           to a single unexplained score, discarding the reasoning that
-          underlies preference. RationalRewards produces explicit,
-          multi-dimensional critiques before scoring, enabling two complementary
-          optimization pathways: train-time RL with interpretable, fine-grained
-          rewards and test-time Generate-Critique-Refine prompt updates without
-          parameter changes.
+          underlies preference. We show that teaching reward models to produce
+          explicit, multi-dimensional critiques before scoring transforms them
+          from passive evaluators into active optimization tools.
         </p>
         <p>
-          To avoid costly rationale annotation, we introduce
-          <strong>Preference-Anchored Rationalization (PARROT)</strong>, a
-          framework that recovers high-quality rationales from preference data
-          via anchored generation, consistency filtering, and distillation.
+          RationalRewards improves generators in two complementary ways. At
+          training time, structured rationales provide interpretable, fine-grained
+          rewards for reinforcement learning. At test time, a
+          <strong>Generate-Critique-Refine</strong> loop turns critiques into
+          targeted prompt revisions that improve outputs without parameter
+          updates.
+        </p>
+        <p>
+          To train this behavior without costly rationale annotation, we
+          introduce <strong>Preference-Anchored Rationalization (PARROT)</strong>,
+          a practical framework with anchored generation, consistency filtering,
+          and distillation. RationalRewards (8B) reaches state-of-the-art
+          preference prediction among open-source reward models, while using
+          10-20 times less training data than comparable scalar baselines.
         </p>
       </section>
 
       <section class="card">
-        <h2>Teaser Figure</h2>
-        <div class="figure-placeholder">
-          Add teaser image to <code>static/teaser.png</code> and update this
-          block if needed.
-        </div>
-        <!--
-          <img src="static/teaser.png" alt="RationalRewards teaser" />
-        -->
-      </section>
-
-      <section class="grid">
-        <article class="card">
-          <h3>Key Ideas</h3>
-          <ul>
-            <li>Critique-then-score reward modeling</li>
-            <li>Interpretable reward signals for diffusion RL</li>
-            <li>Generate-Critique-Refine at test time</li>
-            <li>PARROT for rationale supervision from preference data</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Resources</h3>
-          <ul>
-            <li><a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I">RationalRewards-8B-T2I</a></li>
-            <li><a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">RationalRewards-8B-Edit</a></li>
-            <li><a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench">Evaluation Dataset</a></li>
-            <li><a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData">RL Training Dataset</a></li>
-          </ul>
-        </article>
+        <h2>Main Results at a Glance</h2>
+        <p>
+          Instantiated via PARROT on a
+          Qwen3-VL-Instruct-8B backbone, RationalRewards achieves state-of-the-art
+          preference prediction among open-source reward models and remains
+          competitive with Gemini-2.5-Pro. As an RL reward, it consistently
+          improves generators beyond scalar baselines across both text-to-image
+          and image-editing tasks. Most interestingly, RationalRewards'
+          single-iteration test-time prompt tuning matches
+          or exceeds RL-based fine-tuning on several benchmarks. This suggests
+          that <strong>visual generators possess dormant capabilities</strong> that leaves substantial room for improvement 
+          via test-time prompt tuning.  
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/teaser.png"
+            alt="Train-time RL and test-time prompt tuning with RationalRewards."
+            loading="lazy"
+          />
+          <figcaption>
+            Train-time RL and test-time prompt tuning with RationalRewards
+            across text-to-image and image-editing benchmarks. A key takeaway is
+            that test-time critique-and-refine can match or even surpass costly
+            RL fine-tuning on several tasks.
+          </figcaption>
+        </figure>
       </section>
 
       <section class="card">
-        <h2>Coming Soon</h2>
-        <ul>
-          <li>Paper PDF and citation details</li>
-          <li>Benchmark tables and per-benchmark links</li>
-          <li>More qualitative examples and failure cases</li>
-        </ul>
+        <h2>Why Reasoning Rewards?</h2>
+        <p>
+          Traditional scalar reward models compress instruction faithfulness,
+          visual quality, composition, and plausibility into one opaque number.
+          That collapse discards the structure of human judgment and makes
+          optimization brittle. RationalRewards keeps these dimensions explicit,
+          so generators receive feedback that is interpretable and directly tied
+          to what should change.
+        </p>
+        <p>
+          This shift turns the reward model from a passive evaluator into an
+          optimization interface. During RL, the critique dimensions produce
+          denser learning signals; during inference, they become targeted edits
+          to prompts in a Generate-Critique-Refine loop.
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/usage.png"
+            alt="Overview of RationalRewards usage scenarios."
+            loading="lazy"
+          />
+          <figcaption>
+            RationalRewards supports both train-time optimization in parameter
+            space and test-time optimization in prompt space.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="card">
+        <h2>Preference-Anchored Rationalization (PARROT)</h2>
+        <p>
+          High-quality rationale supervision is expensive to annotate manually,
+          so we recover it from existing pairwise preference data. PARROT starts
+          with a teacher VLM to generate preference-anchored critique candidates,
+          filters out inconsistent explanations, then distills the remaining
+          rationales into an 8B student that can critique without seeing labels.
+        </p>
+        <p>
+          In practice, this bridges theory and scale: it treats rationales as
+          latent variables while remaining a practical three-stage pipeline that
+          can be trained with much less data than comparable scalar baselines.
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/method.png"
+            alt="PARROT three-phase training pipeline."
+            loading="lazy"
+          />
+          <figcaption>
+            PARROT pipeline: anchored rationale generation, consistency
+            filtering, and student distillation.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="card">
+        <h2>Preference Prediction and Alignment Quality</h2>
+        <p>
+          A first requirement for any reward model is to predict pairwise human
+          preference reliably. RationalRewards achieves state-of-the-art
+          performance among open-source baselines, while staying competitive
+          with strong closed models. This indicates that explicit critiques do
+          not trade off against ranking accuracy; they strengthen it.
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/preferencepred.png"
+            alt="Preference prediction performance results."
+            loading="lazy"
+          />
+          <figcaption>
+            Preference prediction results across public evaluation benchmarks.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="card">
+        <h2>Robustness Against Reward Hacking</h2>
+        <p>
+          Scalar rewards can be exploited by superficial correlations that do
+          not reflect real user intent. RationalRewards mitigates this by
+          forcing explicit explanation channels, which makes optimization more
+          semantically grounded and less prone to reward hacking. We also hypothesize that 
+          advancements in diffusion RL might be bottlenecked by reward models, and we envision
+          the stability and accuracy of RationalRewards as a key enabler for further research in diffusion RL methods. 
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/rewardhack.png"
+            alt="Reward hacking analysis and comparison."
+            loading="lazy"
+          />
+          <figcaption>
+            Structured critique channels reduce reward hacking and improve
+            optimization stability.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="card">
+        <h2>Test-Time Generate-Critique-Refine</h2>
+        <p>
+          Beyond serving as an RL reward, RationalRewards can be used after
+          image generation to critique outputs and rewrite prompts toward better
+          fidelity. This test-time optimization path requires no parameter
+          updates and can recover performance that would otherwise need costly
+          fine-tuning.
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/testtime.png"
+            alt="Test-time prompt tuning and critique-refine performance."
+            loading="lazy"
+          />
+          <figcaption>
+            Test-time prompt tuning with RationalRewards can match or exceed
+            RL-based improvement on several benchmarks.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="card">
+        <h2>Additional Use Cases</h2>
+        <p>
+          The same reasoning feedback supports a broad set of workflows,
+          including quality diagnosis, post-hoc correction, and generation loop
+          control. This flexibility comes from keeping critique structure
+          explicit instead of collapsing all judgment dimensions into a scalar.
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/moreusage.png"
+            alt="Additional examples and practical use cases."
+            loading="lazy"
+          />
+          <figcaption>
+            Qualitative examples showing how reasoning-guided feedback improves
+            outputs across scenarios.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="card" id="citation">
+        <h2>Citation</h2>
+        <p>If you find RationalRewards useful in your research, please cite:</p>
+        <pre><code>@article{rationalrewards2026,
+  title   = {RationalRewards: Reasoning Rewards Scale Visual Generation at both Training and Test Time},
+  author  = {Haozhe Wang and Cong Wei and Weiming Ren and Jiaming Liu and Fangzhen Lin and Wenhu Chen},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</code></pre>
       </section>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <p>RationalRewards © 2026</p>
+        <p>RationalRewards © 2026 · TIGER AI Lab</p>
       </div>
     </footer>
   </body>
