@@ -32,8 +32,11 @@ body {
 }
 
 h1 {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0 auto;
+  max-width: 42ch;
+  text-align: center;
+  font-size: clamp(1.8rem, 3.35vw, 2.9rem);
+  line-height: 1.22;
 }
 
 .subtitle {
@@ -43,17 +46,26 @@ h1 {
 }
 
 .tagline {
-  margin: 18px 0 0;
+  margin: 18px auto 0;
   max-width: 760px;
   font-size: 1.06rem;
+  text-align: center;
 }
 
 .badge-links {
   margin-top: 22px;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.badge-row {
+  display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
+  justify-content: center;
 }
 
 .badge-links a {
@@ -185,6 +197,10 @@ a {
 
   .badge-links img {
     height: 26px;
+  }
+
+  h1 {
+    max-width: 100%;
   }
 
   .card {
