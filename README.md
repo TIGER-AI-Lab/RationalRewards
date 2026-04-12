@@ -2,28 +2,29 @@
 
 <div align="center">
   <a href="#">
-    <img src="https://img.shields.io/badge/Paper-Coming%20Soon-B31B1B?style=flat-square&logo=arxiv&logoColor=white" alt="Paper (Coming Soon)">
+    <img src="https://img.shields.io/badge/Paper-Coming%20Soon-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper (Coming Soon)">
   </a>
   <a href="https://tiger-ai-lab.github.io/RationalRewards/">
-    <img src="https://img.shields.io/badge/Project%20Page-0A66C2?style=flat-square&logo=googlechrome&logoColor=white" alt="Project Page">
+    <img src="https://img.shields.io/badge/Project%20Page-0A66C2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Project Page">
   </a>
   <a href="https://github.com/TIGER-AI-Lab/RationalRewards">
-    <img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub">
+    <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
   </a>
   <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I">
-    <img src="https://img.shields.io/badge/Model%20(T2I)-FFD966?style=flat-square&logo=huggingface&logoColor=black" alt="Model (T2I)">
+    <img src="https://img.shields.io/badge/Model%20(T2I)-FFD966?style=for-the-badge&logo=huggingface&logoColor=black" alt="Model (T2I)">
   </a>
   <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">
-    <img src="https://img.shields.io/badge/Model%20(Edit)-FFD966?style=flat-square&logo=huggingface&logoColor=black" alt="Model (Edit)">
+    <img src="https://img.shields.io/badge/Model%20(Edit)-FFD966?style=for-the-badge&logo=huggingface&logoColor=black" alt="Model (Edit)">
   </a>
+  <br>
   <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData">
-    <img src="https://img.shields.io/badge/SFT%20Dataset-FFB7B2?style=flat-square&logo=huggingface&logoColor=black" alt="SFT Dataset">
+    <img src="https://img.shields.io/badge/SFT%20Dataset-FFB7B2?style=for-the-badge&logo=huggingface&logoColor=black" alt="SFT Dataset">
   </a>
   <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench">
-    <img src="https://img.shields.io/badge/Eval%20Dataset-FFB7B2?style=flat-square&logo=huggingface&logoColor=black" alt="Eval Dataset">
+    <img src="https://img.shields.io/badge/Eval%20Dataset-FFB7B2?style=for-the-badge&logo=huggingface&logoColor=black" alt="Eval Dataset">
   </a>
   <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData">
-    <img src="https://img.shields.io/badge/Diffusion%20RL%20Training%20Dataset-FFB7B2?style=flat-square&logo=huggingface&logoColor=black" alt="Diffusion RL Training Dataset">
+    <img src="https://img.shields.io/badge/Diffusion%20RL%20Training%20Dataset-FFB7B2?style=for-the-badge&logo=huggingface&logoColor=black" alt="Diffusion RL Training Dataset">
   </a>
 </div>
 
