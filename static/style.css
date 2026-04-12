@@ -35,8 +35,8 @@ h1 {
   margin: 0 auto;
   max-width: 42ch;
   text-align: center;
-  font-size: clamp(1.8rem, 3.35vw, 2.9rem);
-  line-height: 1.22;
+  font-size: clamp(1.6rem, 2.7vw, 2.45rem);
+  line-height: 1.26;
 }
 
 .subtitle {
