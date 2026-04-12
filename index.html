@@ -246,6 +246,28 @@
       </section>
 
       <section class="card">
+        <h2>Diffusion RL Training Evolution</h2>
+        <p>
+          Beyond final benchmark numbers, we observe stable and consistent
+          improvements during diffusion RL training when using RationalRewards
+          as the optimization signal, in contrast to reward hacking in scalar rewards (see Figure 12 in the paper). The trajectory highlights how structured
+          reward feedback can guide generation quality upward over training
+          steps, complementing the endpoint comparisons shown in other figures.
+        </p>
+        <figure class="paper-figure">
+          <img
+            src="figures/evolution_rl.png"
+            alt="Evolution of diffusion RL training performance."
+            loading="lazy"
+          />
+          <figcaption>
+            Training-time evolution under RationalRewards-guided diffusion RL,
+            illustrating progressive gains during optimization.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="card">
         <h2>Test-Time Generate-Critique-Refine</h2>
         <p>
           Beyond serving as an RL reward, RationalRewards can be used after
