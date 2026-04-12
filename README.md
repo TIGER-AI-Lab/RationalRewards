@@ -1,4 +1,4 @@
-# RationalRewards: Reasoning Rewards Scale Visual Generation at both Training and Test Time
+# RationalRewards: Reasoning Rewards Scale Visual Generation Both Training and Test Time
 
 <div align="center">
   <strong>Haozhe Wang</strong><sup>1</sup> &nbsp;
