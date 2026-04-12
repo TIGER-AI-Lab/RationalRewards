@@ -1,6 +1,20 @@
 # RationalRewards: Reasoning Rewards Scale Visual Generation at both Training and Test Time
 
 <div align="center">
+  <strong>Haozhe Wang</strong><sup>1</sup> &nbsp;
+  <strong>Cong Wei</strong><sup>2</sup> &nbsp;
+  <strong>Weiming Ren</strong><sup>2</sup> &nbsp;
+  <strong>Jiaming Liu</strong><sup>3</sup> &nbsp;
+  <strong>Fangzhen Lin</strong><sup>1</sup> &nbsp;
+  <strong>Wenhu Chen</strong><sup>2</sup><br>
+  <sup>1</sup> HKUST &nbsp;
+  <sup>2</sup> University of Waterloo &nbsp;
+  <sup>3</sup> Alibaba
+</div>
+
+-----
+
+<div align="center">
   <a href="#">
     <img src="https://img.shields.io/badge/Paper-Coming%20Soon-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper (Coming Soon)">
   </a>
@@ -28,16 +42,13 @@
   </a>
 </div>
 
-RationalRewards is a reasoning-based reward model and toolkit for visual generation. Instead of reducing preference into one opaque scalar, it generates explicit multi-dimensional critiques before scoring, turning reward models from passive evaluators into active optimization interfaces.
+**RationalRewards**, is a reasoning-based reward model and toolkit for visual generation. Instead of reducing preference into one opaque scalar, it generates explicit multi-dimensional critiques before scoring, turning reward models from passive evaluators into active optimization interfaces.
 
-The same model supports both:
+**About the name:** "Rational" means being reasonable, sensible, in Chinese, 理性的
+
+**RationalRewards supports optimization in complementary spaces**:
 - **train-time optimization** through RL with structured, interpretable reward signals, and
-- **test-time optimization** through a Generate-Critique-Refine loop without parameter updates.
-
-We currently release **three datasets** spanning the full pipeline:
-1. **SFT training data** for reward model supervision.
-2. **Preference evaluation data** for benchmark-level pairwise comparison.
-3. **Diffusion RL training data** for train-time optimization.
+- **test-time optimization** through a Generate-Critique-Refine loop without parameter updates. 
 
 ## Key Results
 
