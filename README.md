@@ -91,6 +91,15 @@ RationalRewards strengthens both alignment quality and downstream optimization.
 
 *Structured critique channels reduce shortcut exploitation compared with scalar-only rewards.*
 
+To better show optimization behavior, we also include diffusion RL training
+evolution results. The figure below visualizes how RationalRewards-guided
+training improves over time, illustrating that benefits are not only visible at
+the final checkpoint but emerge consistently throughout training. This constrast sharply with scalar rewards suffering reward hacking, as we demonstrate in Figure 12 in the paper.
+
+![Diffusion RL evolution](assets/evolution_rl.png)
+
+*Evolution of diffusion RL performance under RationalRewards-guided optimization.*
+
 ![Test-time prompt tuning results](assets/testtime.png)
 
 *Generate-Critique-Refine at test time can match or exceed RL fine-tuning on several benchmarks.*
