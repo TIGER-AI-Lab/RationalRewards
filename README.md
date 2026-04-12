@@ -1,12 +1,12 @@
-# RationalRewards
+# RationalRewards: Reasoning Rewards Scale Visual Generation at Both Training and Test Time
 
 RationalRewards is a reasoning-based reward model and toolkit for visual generation.  
 It supports both:
 
 - **train-time optimization** (RL with structured, interpretable reward feedback), and
-- **test-time optimization** (Generate-Critique-Refine prompt updates without parameter changes).
+- **test-time optimization** (Generate-Critique-Refine prompt revisions without parameter changes).
 
-[Project Page](https://tiger-ai-lab.github.io/RationalRewards/) | [Models](https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I) | [Datasets](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData)
+[Project Page](https://tiger-ai-lab.github.io/RationalRewards/) | [RationalRewards-T2I](https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I) | [RationalRewards-Edit](https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit) | [RationalRewards-SFT-Data](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData) | [Diffusion RL Training Data](https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData)
 
 ## 📣 News
 
@@ -24,11 +24,15 @@ RationalRewards instead generates **multi-dimensional critiques before scoring**
 
 To avoid expensive rationale annotation, we use **Preference-Anchored Rationalization (PARROT)** to recover high-quality rationales from preference data through anchored generation, consistency filtering, and distillation.
 
-In our experiments, RationalRewards achieves state-of-the-art preference prediction among open-source reward models, improves diffusion RL training for both text-to-image and editing, and delivers strong test-time prompt tuning gains.
+In our experiments, RationalRewards achieves state-of-the-art preference prediction among open-source reward models, improves diffusion RL training for both text-to-image and editing, and delivers strong test-time prompt tuning gains. Surprisingly, test-time prompt tuning can achieve gains that match or even surpass parameter tuning gains. 
+
+**This reveals a critical finding:** the visual generators possess dormant rendering capabilities, which leaves substantial room for improvement via prompt-space optimization.
+
 
 ![RationalRewards teaser](assets/teaser.png)
 
 *Train-time RL and test-time prompt tuning with RationalRewards across visual generation benchmarks.*
+
 
 ## ✨ Features
 
@@ -73,7 +77,7 @@ Then follow module-level READMEs for exact command dependencies:
 
 ## 🚀 Quick Start
 
-All scripts are environment-variable driven. Replace `/path/to/...` placeholders with your local paths.
+**Please refer to readme in the individual folders for details.** All scripts are environment-variable driven. Replace `/path/to/...` placeholders with your local paths.
 
 ### Step 1: Train RationalRewards with SFT
 
@@ -109,21 +113,19 @@ bash test_time_prompt_tuning/run_test_time_tuning.sh
 
 Released evaluation data covers benchmark families including:
 
-- GenAIBench
-- MMRB2
-- ERBench
+- [GenAI-Bench](https://github.com/TIGER-AI-Lab/GenAI-Bench)
+- [Multimodal RewardBench 2](https://github.com/facebookresearch/MMRB2)
+- [EditReward-Bench](https://github.com/TIGER-AI-Lab/EditReward)
 
-> **Table Placeholder:** Add benchmark breakdown for image editing (e.g., GEdit-Bench, ImgEdit-Bench, PICA-Bench) here.
->
-> **Table Placeholder:** Add UniGenBench++ per-dimension results here.
+We uploaded the cleaned Preference evaluation data we use: [TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench)
 
 ## 📦 Public Datasets and Models
 
-- SFT training data: [TIGER-Lab/RationalRewards-SFTData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData)
-- Preference evaluation data: [TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-EvalData-GenAIBench-MMRB2-ERBench)
-- RL training data: [TIGER-Lab/RationalRewards_DiffusionNFT_TrainData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData)
-- Reward model (T2I): [TIGER-Lab/RationalRewards-8B-T2I](https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I)
-- Reward model (Edit): [TIGER-Lab/RationalRewards-8B-Edit](https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit)
+- SFT training data for Reward Model Training: [TIGER-Lab/RationalRewards-SFTData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData)
+- RL training data for diffusion RL training: [TIGER-Lab/RationalRewards_DiffusionNFT_TrainData](https://huggingface.co/datasets/TIGER-Lab/RationalRewards_DiffusionNFT_TrainData)
+We collect the dataset by performing difficulty-aware stratified sampling.
+- RationalRewards (T2I): [TIGER-Lab/RationalRewards-8B-T2I](https://huggingface.co/TIGER-Lab/RationalRewards-8B-T2I)
+- RationalRewards (Edit): [TIGER-Lab/RationalRewards-8B-Edit](https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit)
 
 ## 🧪 Repository Structure
 
