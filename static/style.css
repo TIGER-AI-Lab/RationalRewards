@@ -39,6 +39,15 @@ h1 {
   line-height: 1.26;
 }
 
+.authors {
+  margin: 14px auto 0;
+  max-width: 900px;
+  text-align: center;
+  color: #243353;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 .subtitle {
   margin: 8px 0 0;
   font-size: 1.2rem;
@@ -209,5 +218,9 @@ a {
 
   body {
     font-size: 16px;
+  }
+
+  .authors {
+    font-size: 0.95rem;
   }
 }
