@@ -59,22 +59,22 @@ h1 {
 .badge-links a {
   display: inline-flex;
   line-height: 0;
-  padding: 3px;
+  padding: 0;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 0;
   background: #ffffff;
-  box-shadow: 0 2px 8px rgba(23, 32, 51, 0.08);
+  box-shadow: none;
 }
 
 .badge-links img {
   height: 28px;
-  border-radius: 6px;
+  border-radius: 0;
   display: block;
 }
 
 .badge-links a:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(23, 32, 51, 0.12);
+  transform: none;
+  filter: brightness(0.98);
 }
 
 main {
