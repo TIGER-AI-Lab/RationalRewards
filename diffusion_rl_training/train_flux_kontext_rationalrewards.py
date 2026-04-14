@@ -58,178 +58,20 @@ import requests
 
 tqdm = partial(tqdm.tqdm, dynamic_ncols=True)
 
+SYSTEM_PROMPT = (
+    "You are an expert image editing evaluator. Your task is to evaluate the quality of an edited "
+    "image based on a source image and a user instruction. Afterwards, you need to suggest how to "
+    "refine the original user request to produce better image edits (if any)."
+)
 
-def extract_numeric_score(score_value):
-    """Extract numeric score from various formats, based on logic from generate_judge_qwenvl_reference_guided_editreward2_merge_refine.py"""
-    if score_value is None:
-        raise ValueError("Score value is None: {}".format(score_value))
-    elif score_value == 'N/A':
-        return 'N/A'
-    else:
-        # If it's already a number, use it as float
-        if isinstance(score_value, (int, float)):
-            return float(score_value)
-        # If it's a string, try to extract the first numeric value
-        elif isinstance(score_value, str):
-            # Match pattern: optional whitespace, then a number (int or float), then optional non-numeric content
-            match = re.match(r'^\s*(\d+(?:\.\d+)?)', score_value.strip())
-            if match:
-                try:
-                    return float(match.group(1))
-                except ValueError as e:
-                    raise ValueError("Failed to convert extracted value '{}' to float from '{}': {}".format(match.group(1), score_value, e))
-            else:
-                raise ValueError("Could not extract numeric score from string: '{}'".format(score_value))
-        else:
-            raise ValueError("Unsupported score value type: {} with value: {}".format(type(score_value), score_value))
-
-
-def parse_scores_from_detailed_judgement(detailed_judgement):
-    """
-    Parse predicted scores from the detailed_judgement text.
-    Uses logic similar to parse_evaluation_response from generate_judge_qwenvl_compare_hpdv3_t2i_v2.py
-    Returns a dict with keys: text_faithfulness, image_faithfulness, physical_quality, text_rendering
-    """
-
-    # --- Helper: Value Extractor ---
-    def _extract_score_from_block(block_text):
-        """Parses a specific text block for one dimension to find the score."""
-        lines = block_text.split('\n')
-
-        for line in lines:
-            line = line.strip()
-            # Look for "## Score:" pattern
-            if "## Score:" in line:
-                # Split by '## Score:' and take everything after it
-                raw_val = line.split("## Score:")[-1].strip()
-                try:
-                    return extract_numeric_score(raw_val)
-                except ValueError:
-                    continue
-        return None
-
-    # --- Main Logic ---
-
-    # 1. Initialize Result
-    result = {
-        "text_faithfulness": None,
-        "image_faithfulness": None,
-        "physical_quality": None,
-        "text_rendering": None
-    }
-
-    # 2. Pre-processing: Separate Summary from Body (if present)
-    content_body = detailed_judgement
-    if "# Summary:" in detailed_judgement:
-        parts = detailed_judgement.split("# Summary:")
-        if len(parts) > 1:
-            content_body = parts[0]
-
-    # 3. Splitting: Cut the text into blocks based on numbered headers
-    # We use partition() which splits string at the first occurrence of separator
-
-    # Headers to look for
-    h1 = "Text Faithfulness:"
-    h2 = "Image Faithfulness:"
-    h3 = "Physical and Visual Quality:"
-    h4 = "Text Rendering:"
-
-    # Logic: Find H1, everything after is rest. From rest, find H2, etc.
-    if h1 in content_body:
-        _, _, rest = content_body.partition(h1)
-        block_tf, _, rest = rest.partition(h2) if h2 in rest else (rest, "", "")
-        block_if, _, rest = rest.partition(h3) if h3 in rest else (rest, "", "")
-        block_pq, _, rest = rest.partition(h4) if h4 in rest else (rest, "", "")
-        block_tr = rest  # The remainder is Text Rendering
-    else:
-        # Fallback to old regex-based splitting if headers not found
-        sections = re.split(r'\n\s*\d+\.\s+', content_body)
-        block_tf = sections[1] if len(sections) > 1 else ""
-        block_if = sections[2] if len(sections) > 2 else ""
-        block_pq = sections[3] if len(sections) > 3 else ""
-        block_tr = sections[4] if len(sections) > 4 else ""
-
-    # Map blocks to keys
-    sections = {
-        "text_faithfulness": block_tf,
-        "image_faithfulness": block_if,
-        "physical_quality": block_pq,
-        "text_rendering": block_tr
-    }
-
-    # 4. Parsing: Extract values from each block
-    for key, block_text in sections.items():
-        extracted_score = _extract_score_from_block(block_text)
-        if extracted_score is not None:
-            result[key] = extracted_score
-
-    return result
-
-
-class QwenVLInferenceHTTP:
-    def __init__(self,
-                 model_name="Qwen3-VL-8B-Instruct",
-                 base_url="http://localhost",
-                 port=8000,
-                 timeout=300):
-        self.model_name = model_name
-        # self.base_url = f"{base_url}:{port}"
-        self.base_url = os.environ.get("REWARD_SERVER", base_url)
-
-        self.timeout = timeout
-        self.generate_endpoint = f"{self.base_url}/v1/chat/completions"
-        self.health_endpoint = f"{self.base_url}/v1/models"
-    
-    def check_connection(self):
-        try:
-            response = requests.get(self.health_endpoint, timeout=10)
-            if response.status_code == 200:
-                print("✓ Server connection successful")
-                return True
-            else:
-                print(f"⚠ Server responded with status code: {response.status_code}")
-                return False
-        except Exception as e:
-            print(f"⚠ Warning: Could not connect to server: {e}")
-            return False
-
-    async def generate(self, messages, temperature=0.1, max_tokens=2048):
-        payload = {
-            "model": self.model_name,
-            "messages": messages,
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-        }
-
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    self.generate_endpoint,
-                    json=payload,
-                    timeout=self.timeout
-                ) as response:
-                    if response.status == 200:
-                        result = await response.json()
-                        return result["choices"][0]["message"]["content"]
-                    else:
-                        error_text = await response.text()
-                        print(f"HTTP Error {response.status}: {error_text}")
-                        return None
-        except Exception as e:
-            print(f"Error in generate: {e}")
-            return None
-
-    def _create_scoring_message(self, prompt, ref_image_b64, image_b64, requirement):
-        """Create message for scoring evaluation using the updated template from collect_sft_pointwise_v2.py"""
-        instruction = f"""You are an expert image editing evaluator. Your task is to evaluate the quality of an edited image based on a source image and a user instruction. Afterwards, you need to suggest how to refine the original user request to produce better image edits (if any).
-
-User Instruction: {prompt}
+TASK_RELATED_TEMPLATE = """User Instruction: {request}
 You are provided with two images:
 1. Source Image <image>
 2. Edited Image <image>
 
-Your task is to evaluate the Edited Image against the Source Image and the User Instruction.
-To do this, you must first assess the image on four critical aspects, provide justifications and absolute scores in 1-4 scale.
+Give your analysis and judgement following guidelines in the system prompt. """
+
+COMMON_TASK_GUIDELINE = """To do this, you must first assess the image on four critical aspects, provide justifications and absolute scores in 1-4 scale.
 
 ### Critical Aspects & Scoring Rubric
 **1. Text Faithfulness** (How accurately does the output follow the instruction?)
@@ -288,9 +130,164 @@ Output your evaluation in the following format:
 ## Refinement Comments: [Specific suggestions for improving the user request]
 ## Refined Request: [The improved, more specific user request for editing like a standard user instruction]"""
 
-        # Interleave images into the <image> placeholders
+
+def extract_numeric_score(score_value):
+    """Extract numeric score from various formats, based on logic from generate_judge_qwenvl_reference_guided_editreward2_merge_refine.py"""
+    if score_value is None:
+        raise ValueError("Score value is None: {}".format(score_value))
+    elif score_value == 'N/A':
+        return 'N/A'
+    else:
+        # If it's already a number, use it as float
+        if isinstance(score_value, (int, float)):
+            return float(score_value)
+        # If it's a string, try to extract the first numeric value
+        elif isinstance(score_value, str):
+            # Match pattern: optional whitespace, then a number (int or float), then optional non-numeric content
+            match = re.match(r'^\s*(\d+(?:\.\d+)?)', score_value.strip())
+            if match:
+                try:
+                    return float(match.group(1))
+                except ValueError as e:
+                    raise ValueError("Failed to convert extracted value '{}' to float from '{}': {}".format(match.group(1), score_value, e))
+            else:
+                raise ValueError("Could not extract numeric score from string: '{}'".format(score_value))
+        else:
+            raise ValueError("Unsupported score value type: {} with value: {}".format(type(score_value), score_value))
+
+
+def parse_scores_from_detailed_judgement(detailed_judgement):
+    """
+    Parse predicted scores from the detailed_judgement text.
+    Uses logic similar to parse_evaluation_response from generate_judge_qwenvl_compare_hpdv3_t2i_v2.py
+    Returns a dict with keys: text_faithfulness, image_faithfulness, physical_quality, text_rendering
+    """
+
+    def _extract_score_from_block(block_text):
+        """Parses one dimension block and extracts score + justification."""
+        data = {
+            "score": None,
+            "justification": ""
+        }
+        lines = block_text.split('\n')
+        for line in lines:
+            line = line.strip()
+            if "## Score:" in line:
+                raw_val = line.split("## Score:")[-1].strip()
+                try:
+                    data["score"] = extract_numeric_score(raw_val)
+                except ValueError:
+                    continue
+        data["justification"] = block_text.split("Justification:")[-1].strip().split("## Score")[0].strip()
+        return data
+
+    result = {
+        "text_faithfulness": {"score": None, "justification": ""},
+        "image_faithfulness": {"score": None, "justification": ""},
+        "physical_quality": {"score": None, "justification": ""},
+        "text_rendering": {"score": None, "justification": ""}
+    }
+
+    content_body = detailed_judgement
+    if "# Summary:" in detailed_judgement:
+        parts = detailed_judgement.split("# Summary:")
+        if len(parts) > 1:
+            content_body = parts[0]
+
+    h1 = "Text Faithfulness:"
+    h2 = "Image Faithfulness:"
+    h3 = "Physical and Visual Quality:"
+    h4 = "Text Rendering:"
+
+    if h1 in content_body:
+        _, _, rest = content_body.partition(h1)
+        block_tf, _, rest = rest.partition(h2) if h2 in rest else (rest, "", "")
+        block_if, _, rest = rest.partition(h3) if h3 in rest else (rest, "", "")
+        block_pq, _, rest = rest.partition(h4) if h4 in rest else (rest, "", "")
+        block_tr = rest
+    else:
+        sections = re.split(r'\n\s*\d+\.\s+', content_body)
+        block_tf = sections[1] if len(sections) > 1 else ""
+        block_if = sections[2] if len(sections) > 2 else ""
+        block_pq = sections[3] if len(sections) > 3 else ""
+        block_tr = sections[4] if len(sections) > 4 else ""
+
+    sections = {
+        "text_faithfulness": block_tf,
+        "image_faithfulness": block_if,
+        "physical_quality": block_pq,
+        "text_rendering": block_tr
+    }
+
+    for key, block_text in sections.items():
+        extracted_data = _extract_score_from_block(block_text)
+        result[key] = extracted_data
+
+    return result
+
+
+class QwenVLInferenceHTTP:
+    def __init__(self,
+                 model_name="Qwen3-VL-8B-Instruct",
+                 base_url="http://localhost",
+                 port=8000,
+                 timeout=300):
+        self.model_name = model_name
+        # self.base_url = f"{base_url}:{port}"
+        self.base_url = os.environ.get("REWARD_SERVER", base_url)
+
+        self.timeout = timeout
+        self.generate_endpoint = f"{self.base_url}/v1/chat/completions"
+        self.health_endpoint = f"{self.base_url}/v1/models"
+    
+    def check_connection(self):
+        try:
+            response = requests.get(self.health_endpoint, timeout=10)
+            if response.status_code == 200:
+                print("✓ Server connection successful")
+                return True
+            else:
+                print(f"⚠ Server responded with status code: {response.status_code}")
+                return False
+        except Exception as e:
+            print(f"⚠ Warning: Could not connect to server: {e}")
+            return False
+
+    async def generate(self, messages, temperature=0.1, max_tokens=2048):
+        payload = {
+            "model": self.model_name,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    self.generate_endpoint,
+                    json=payload,
+                    timeout=self.timeout
+                ) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        return result["choices"][0]["message"]["content"]
+                    else:
+                        error_text = await response.text()
+                        print(f"HTTP Error {response.status}: {error_text}")
+                        return None
+        except Exception as e:
+            print(f"Error in generate: {e}")
+            return None
+
+    def _create_scoring_message(self, prompt, ref_image_b64, image_b64, requirement):
+        """Create message for scoring evaluation."""
+        user_prompt = "{}\n\n{}".format(
+            TASK_RELATED_TEMPLATE.format(request=prompt),
+            COMMON_TASK_GUIDELINE,
+        )
+
         content = []
-        parts = instruction.split("<image>")
+        parts = user_prompt.split("<image>")
 
         content.append({"type": "text", "text": parts[0]})
         content.append({
@@ -306,39 +303,33 @@ Output your evaluation in the following format:
             content.append({"type": "text", "text": parts[2]})
 
         messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": content}
         ]
         return messages
 
     def _parse_scoring_response(self, response):
-        """Parse the detailed evaluation response using the updated logic from generate_judge_qwenvl_reference_guided_editreward2_merge_refine.py"""
+        """Parse the detailed evaluation response and compute average score."""
         if not response:
             print("No response received")
             return 0.0
 
         try:
-            # Use the new parsing logic
             parsed_result = parse_scores_from_detailed_judgement(response)
-
-            # Extract scores from all aspects
             scores = []
-            aspects = ['text_faithfulness', 'physical_quality', 'text_rendering']  # 'image_faithfulness'
-
+            aspects = ['text_faithfulness', 'physical_quality', 'text_rendering']
             for aspect in aspects:
-                score = parsed_result.get(aspect)
+                aspect_data = parsed_result.get(aspect, {})
+                score = aspect_data.get("score")
                 if score is not None and score != "N/A":
                     try:
                         scores.append(float(score))
-                        # print(f"Parsed {aspect} score: {score}")
                     except (ValueError, TypeError):
                         print(f"Could not convert {aspect} score to float: {score}")
 
             if scores:
-                # Compute average of available scores (typically 3 or 4 aspects)
                 overall_score = sum(scores) / len(scores)
-                # Normalize from 1-4 scale to 0-1 range
-                normalized_score = (overall_score - 1) / 3  # Maps 1->0, 4->1
-                # print(f"Average of {len(scores)} scores: {overall_score:.2f} -> {normalized_score:.4f}")
+                normalized_score = (overall_score - 1) / 3
                 return normalized_score
             else:
                 print(f"Could not parse any valid scores from response")
