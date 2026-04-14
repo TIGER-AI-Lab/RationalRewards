@@ -15,7 +15,7 @@
     <header class="hero">
       <div class="container">
         <h1>
-          RationalRewards: Reasoning Rewards Scale Visual Generation at Both
+          RationalRewards: Reasoning Rewards Scale Visual Generation Both
           Training and Test Time
         </h1>
         <p class="authors">
@@ -175,31 +175,36 @@
         </p>
         <h3>Takeaway 1: Why do reasoning rewards resist reward hacking?</h3>
         <p>
-          Scalar rewards can be hacked because they collapse rich judgment into
-          a single number that may increase even when outputs do not improve.
-          RationalRewards introduces an implicit regularization: before giving
-          scores, it must produce coherent, multi-dimensional critiques tied to
-          concrete evaluation axes. This keeps optimization grounded in visible
-          evidence and improves reward-quality alignment during RL.
+          Scalar reward models are susceptible to reward hacking: rewards can
+          rise while visual quality degrades because evaluation is compressed
+          into one opaque number. RationalRewards imposes an implicit
+          regularization by requiring coherent, multi-dimensional reasoning
+          before scoring. When each score must be justified by concrete visual
+          evidence, unsupported reward inflation becomes much harder and reward
+          trajectories stay better aligned with real quality.
         </p>
         <h3>Takeaway 2: Why are preference-trained rewards more stable?</h3>
         <p>
-          Generic VLM judges can be strong analyzers, but as reward functions
-          they often produce high-variance pointwise scores across similar
-          samples, which becomes optimization noise in RL. PARROT calibrates
-          RationalRewards for preference discrimination, yielding lower-variance,
-          preference-aligned rewards that produce more reliable optimization
-          steps, even with a smaller model footprint.
+          A strong generic VLM judge is not automatically a stable reward model.
+          In pointwise evaluation, generic judges can output high-variance
+          scores for semantically similar images, which injects noise into RL.
+          PARROT preference training calibrates RationalRewards for low-variance,
+          preference-aligned scoring on semantically similar images. This scoring stability is the key
+          advantage: a smaller trained reward model can optimize more reliably
+          than a larger generic judge.
         </p>
         <h3>Takeaway 3: Why do reasoning rewards enable test-time scaling?</h3>
         <p>
-          Reasoning rewards are useful beyond train-time RL. In a post-hoc
-          Generate-Critique-Refine loop, RationalRewards critiques the generated
-          output, identifies concrete failures, and proposes targeted prompt
-          revisions. Because refinement is conditioned on observed errors rather
-          than blind rewriting, test-time compute can unlock latent generator
-          capability and often approach or surpass RL fine-tuning gains without
-          parameter updates.
+          Generators often have latent capability that suboptimal prompts fail
+          to elicit. In a post-hoc Generate-Critique-Refine loop,
+          RationalRewards critiques the actual output, identifies failure modes,
+          and proposes targeted prompt revisions optimized toward human
+          preference. The key reason this scales at test time is that preference
+          training has already internalized the human-preference objective into
+          the reward model itself. Unlike blind pre-generation prompt rewriting,
+          this is preference-aware and reactive to observed errors, so test-time
+          compute can match or exceed RL fine-tuning gains without parameter
+          updates.
         </p>
         <figure class="paper-figure">
           <img
@@ -354,7 +359,7 @@
         <h2>Citation</h2>
         <p>If you find RationalRewards useful in your research, please cite:</p>
         <pre><code>@article{rationalrewards2026,
-  title   = {RationalRewards: Reasoning Rewards Scale Visual Generation at both Training and Test Time},
+  title   = {RationalRewards: Reasoning Rewards Scale Visual Generation Both Training and Test Time},
   author  = {Haozhe Wang and Cong Wei and Weiming Ren and Jiaming Liu and Fangzhen Lin and Wenhu Chen},
   journal = {arXiv preprint},
   year    = {2026}
