@@ -173,6 +173,34 @@
           denser learning signals; during inference, they become targeted edits
           to prompts in a Generate-Critique-Refine loop.
         </p>
+        <h3>Takeaway 1: Why do reasoning rewards resist reward hacking?</h3>
+        <p>
+          Scalar rewards can be hacked because they collapse rich judgment into
+          a single number that may increase even when outputs do not improve.
+          RationalRewards introduces an implicit regularization: before giving
+          scores, it must produce coherent, multi-dimensional critiques tied to
+          concrete evaluation axes. This keeps optimization grounded in visible
+          evidence and improves reward-quality alignment during RL.
+        </p>
+        <h3>Takeaway 2: Why are preference-trained rewards more stable?</h3>
+        <p>
+          Generic VLM judges can be strong analyzers, but as reward functions
+          they often produce high-variance pointwise scores across similar
+          samples, which becomes optimization noise in RL. PARROT calibrates
+          RationalRewards for preference discrimination, yielding lower-variance,
+          preference-aligned rewards that produce more reliable optimization
+          steps, even with a smaller model footprint.
+        </p>
+        <h3>Takeaway 3: Why do reasoning rewards enable test-time scaling?</h3>
+        <p>
+          Reasoning rewards are useful beyond train-time RL. In a post-hoc
+          Generate-Critique-Refine loop, RationalRewards critiques the generated
+          output, identifies concrete failures, and proposes targeted prompt
+          revisions. Because refinement is conditioned on observed errors rather
+          than blind rewriting, test-time compute can unlock latent generator
+          capability and often approach or surpass RL fine-tuning gains without
+          parameter updates.
+        </p>
         <figure class="paper-figure">
           <img
             src="figures/usage.png"
@@ -258,24 +286,6 @@
       </section>
 
       <section class="card">
-        <h2>Takeaway 1: Why Reasoning Rewards Resist Reward Hacking</h2>
-        <p>
-          Scalar reward models are susceptible to reward hacking because they
-          compress evaluation into one number that can increase even when visual
-          quality degrades. RationalRewards adds an implicit regularization:
-          before scoring, the model must produce coherent, multi-dimensional
-          reasoning tied to instruction faithfulness, visual quality, and other
-          concrete criteria.
-        </p>
-        <p>
-          This structure makes unsupported reward inflation harder, because each
-          score must be justified by evidence. In practice, reward trajectories
-          stay better aligned with visible quality changes, which is exactly
-          what diffusion RL needs for trustworthy optimization.
-        </p>
-      </section>
-
-      <section class="card">
         <h2>Diffusion RL Training Evolution</h2>
         <p>
           Beyond final benchmark numbers, we observe stable and consistent
@@ -298,24 +308,6 @@
       </section>
 
       <section class="card">
-        <h2>Takeaway 2: Why Preference-Trained Rewards Outperform Generic Judges</h2>
-        <p>
-          A natural question is why not use a strong generic VLM judge directly.
-          The issue is score variance: generic judges can produce unstable
-          pointwise scores across semantically similar samples, injecting noise
-          into RL updates.
-        </p>
-        <p>
-          PARROT calibrates RationalRewards specifically for preference
-          discrimination, producing lower-variance, preference-aligned rewards.
-          This stability is operationally important: a smaller trained reward
-          model can be more useful for optimization than a larger generic judge
-          when the objective is reliable gradient direction rather than broad
-          open-ended reasoning.
-        </p>
-      </section>
-
-      <section class="card">
         <h2>Test-Time Generate-Critique-Refine</h2>
         <p>
           Beyond serving as an RL reward, RationalRewards can be used after
@@ -335,23 +327,6 @@
             RL-based improvement on several benchmarks.
           </figcaption>
         </figure>
-      </section>
-
-      <section class="card">
-        <h2>Takeaway 3: Why Reasoning Rewards Enable Test-Time Scaling</h2>
-        <p>
-          Reasoning rewards are not only train-time tools. In a post-hoc
-          Generate-Critique-Refine loop, RationalRewards inspects the generated
-          result, diagnoses concrete failure modes, and converts critiques into
-          targeted prompt revisions.
-        </p>
-        <p>
-          The key difference from blind prompt rewriting is that refinement is
-          conditioned on observed errors and implicitly optimized for human
-          preference alignment. This often unlocks latent capability in frozen
-          generators and can match or exceed RL fine-tuning on some benchmarks,
-          without any parameter updates.
-        </p>
       </section>
 
       <section class="card">
