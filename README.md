@@ -15,8 +15,8 @@
 -----
 
 <div align="center">
-  <a href="#">
-    <img src="https://img.shields.io/badge/Paper-Coming%20Soon-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper (Coming Soon)">
+  <a href="https://arxiv.org/abs/2604.11626">
+    <img src="https://img.shields.io/badge/arXiv-2604.11626-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white" alt="Paper (arXiv)">
   </a>
   <a href="https://tiger-ai-lab.github.io/RationalRewards/">
     <img src="https://img.shields.io/badge/Project%20Page-0A66C2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Project Page">
@@ -30,6 +30,9 @@
   <a href="https://huggingface.co/TIGER-Lab/RationalRewards-8B-Edit">
     <img src="https://img.shields.io/badge/Model%20(Edit)-FFD966?style=for-the-badge&logo=huggingface&logoColor=black" alt="Model (Edit)">
   </a>
+  <a href="https://huggingface.co/collections/TIGER-Lab/rationalrewards">
+    <img src="https://img.shields.io/badge/HF%20Collection-RationalRewards-FFD966?style=for-the-badge&logo=huggingface&logoColor=black" alt="HF Collection">
+  </a>
   <br>
   <a href="https://huggingface.co/datasets/TIGER-Lab/RationalRewards-SFTData">
     <img src="https://img.shields.io/badge/SFT%20Dataset-FFB7B2?style=for-the-badge&logo=huggingface&logoColor=black" alt="SFT Dataset">
@@ -42,7 +45,7 @@
   </a>
 </div>
 
-**RationalRewards**, is a reasoning-based reward model and toolkit for visual generation. Instead of reducing preference into one opaque scalar, it generates explicit multi-dimensional critiques before scoring, turning reward models from passive evaluators into active optimization interfaces.
+**RationalRewards** is a reasoning-based reward model and toolkit for visual generation. Instead of reducing preference into one opaque scalar, it generates explicit multi-dimensional critiques before scoring, turning reward models from passive evaluators into active optimization interfaces.
 
 **About the name:** "Rational" means being reasonable, sensible, in Chinese, 理性的
 
@@ -61,6 +64,34 @@ Instantiated via PARROT on a Qwen3-VL-Instruct-8B backbone, RationalRewards achi
 ## Why Reasoning Rewards?
 
 Most reward models collapse instruction following, visual quality, composition, and plausibility into one scalar. This removes the structure of human judgment and often leads to brittle optimization. RationalRewards keeps those dimensions explicit so generators receive semantically grounded feedback about what to fix and why.
+
+### Why do reasoning rewards resist reward hacking?
+
+Scalar rewards are vulnerable to reward hacking because they collapse rich
+judgment into one number that can rise even when outputs do not truly improve.
+RationalRewards introduces an implicit regularization: before giving scores, it
+must produce coherent, multi-dimensional critiques tied to concrete evaluation
+axes. This constrains optimization to evidence-backed reasoning and improves the
+monotonic relationship between reward and observed quality during RL.
+
+### Why are preference-trained rewards more stable than generic VLM judges?
+
+Generic VLM judges can be strong analysts, but as reward functions they often
+show high-variance pointwise scoring across semantically similar samples. That
+variance becomes optimization noise in RL. PARROT trains RationalRewards
+directly for preference discrimination, yielding lower-variance,
+preference-aligned scores. The practical outcome is more stable optimization
+steps and better reward reliability, even with a smaller model footprint.
+
+### Why do reasoning rewards enable test-time scaling?
+
+Reasoning feedback can be reused after generation, not only during training.
+In a Generate-Critique-Refine loop, RationalRewards critiques the produced
+image, identifies concrete deficiencies, and proposes targeted prompt updates.
+Unlike pre-hoc prompt enhancement that rewrites blindly, this is post-hoc and
+reactive to actual failures. That makes test-time compute more effective at
+eliciting latent generator capability, often approaching or surpassing RL
+fine-tuning gains without parameter updates.
 
 ![RationalRewards usage overview](assets/usage.png)
 
@@ -112,7 +143,7 @@ the final checkpoint but emerge consistently throughout training. This constrast
 
 - **[2026/04]** RationalRewards code release: SFT, reward-model evaluation, diffusion RL with RationalRewards, and test-time prompt tuning.
 - **[2026/04]** RationalRewards-8B reward models and public datasets are available on Hugging Face.
-- **[Coming Soon]** Paper preprint and FlowFactory support for additional RL methods.
+- **[2026/04]** Paper preprint released on arXiv: [arXiv:2604.11626](https://arxiv.org/abs/2604.11626).
 
 ## Environment Setup
 
@@ -193,7 +224,7 @@ RationalRewards is built with and inspired by open-source projects, especially:
 
 ```bibtex
 @article{rationalrewards2026,
-  title   = {Think Before You Score: Reasoning Rewards Scale Visual Generation at both Training and Test Time},
+  title   = {RationalRewards: Reasoning Rewards Scale Visual Generation Both Training and Test Time},
   author  = {Haozhe Wang and Cong Wei and Weiming Ren and Jiaming Liu and Fangzhen Lin and Wenhu Chen},
   journal = {arXiv preprint},
   year    = {2026}
