@@ -1,15 +1,7 @@
-<div align="center">
-  <table>
-    <tr>
-      <td align="right" valign="middle" width="42%">
-        <img src="./assets/rationalrewards_logo.png" alt="RationalRewards logo" width="420">
-      </td>
-      <td align="left" valign="middle">
-        <h1 style="margin: 0 0 0 16px; font-size: 36px; font-weight: 800; line-height: 1.1;">RationalRewards: Reasoning Rewards Scale Visual Generation Both Training and Test Time</h1>
-      </td>
-    </tr>
-  </table>
-</div>
+<p align="center">
+  <img src="./assets/rationalrewards_logo.png" alt="RationalRewards logo" width="420" style="vertical-align: middle; margin-right: 16px;" />
+  <span style="font-size: 36px; font-weight: 800; line-height: 1.1; vertical-align: middle;">RationalRewards: Reasoning Rewards Scale Visual Generation Both Training and Test Time</span>
+</p>
 
 <div align="center">
   <strong>Haozhe Wang</strong><sup>1</sup> &nbsp;
