@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="./assets/rationalrewards_logo.png" alt="RationalRewards logo" width="80%">
-  <h1 style="font-size: 32px; font-weight: bold;">Reasoning Rewards Scale Visual Generation Both Training and Test Time</h1>
+  <img src="./assets/rationalrewards_logo.png" alt="RationalRewards logo" width="30%">
+  <h1 style="font-size: 32px; font-weight: bold;">RationalRewards: Reasoning Rewards Scale Visual Generation Both Training and Test Time</h1>
 </div>
 
 <div align="center">
