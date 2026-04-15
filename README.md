@@ -149,6 +149,7 @@ the final checkpoint but emerge consistently throughout training. This constrast
 - **[2026/04]** RationalRewards code release: SFT, reward-model evaluation, diffusion RL with RationalRewards, and test-time prompt tuning.
 - **[2026/04]** RationalRewards-8B reward models and public datasets are available on Hugging Face.
 - **[2026/04]** Paper preprint released on arXiv: [arXiv:2604.11626](https://arxiv.org/abs/2604.11626).
+- **[Coming Soon]** FlowFactory support on other diffusion RL approaches
 
 ## Environment Setup
 
