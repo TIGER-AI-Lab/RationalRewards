@@ -590,7 +590,7 @@ RationalRewards is built with and inspired by open-source projects, especially:
 @article{rationalrewards2026,
   title   = {RationalRewards: Reasoning Rewards Scale Visual Generation Both Training and Test Time},
   author  = {Haozhe Wang and Cong Wei and Weiming Ren and Jiaming Liu and Fangzhen Lin and Wenhu Chen},
-  journal = {arXiv preprint},
+  journal = {arXiv:2604.11626},
   year    = {2026}
 }
 ```
