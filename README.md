@@ -56,6 +56,13 @@
 - **train-time optimization** through RL with structured, interpretable reward signals, and
 - **test-time optimization** through a Generate-Critique-Refine loop without parameter updates. 
 
+## News
+- **[Coming Soon]** working on releasing FlowFactory with RationalRewards support on other diffusion RL approaches
+- **[2026/04/16]** 🚀 RationalRewards **hits #2** on [Hugging Face Daily Papers](https://huggingface.co/papers/2604.11626)!
+- **[2026/04/13]** Paper preprint released on arXiv: [arXiv:2604.11626](https://arxiv.org/abs/2604.11626).
+- **[2026/04]** RationalRewards code release: SFT, reward-model evaluation, diffusion RL with RationalRewards, and test-time prompt tuning.
+- **[2026/04]** RationalRewards-8B reward models and public datasets are available on Hugging Face.
+
 ## Key Results
 
 Instantiated via PARROT on a Qwen3-VL-Instruct-8B backbone, RationalRewards achieves state-of-the-art preference prediction among open-source reward models and remains competitive with Gemini-2.5-Pro. As an RL reward, it consistently improves generators beyond scalar baselines across both text-to-image and image-editing tasks. Most interestingly, RationalRewards' test-time prompt tuning, requiring no parameter updates, matches or exceeds RL-based fine-tuning on several benchmarks.
@@ -144,12 +151,6 @@ the final checkpoint but emerge consistently throughout training. This constrast
 
 *Additional qualitative use cases enabled by explicit reasoning feedback.*
 
-## News
-- **[Coming Soon]** working on releasing FlowFactory with RationalRewards support on other diffusion RL approaches
-- **[2026/04/16]** 🚀 RationalRewards **hits #2** on [Hugging Face Daily Papers](https://huggingface.co/papers/2604.11626)!
-- **[2026/04/13]** Paper preprint released on arXiv: [arXiv:2604.11626](https://arxiv.org/abs/2604.11626).
-- **[2026/04]** RationalRewards code release: SFT, reward-model evaluation, diffusion RL with RationalRewards, and test-time prompt tuning.
-- **[2026/04]** RationalRewards-8B reward models and public datasets are available on Hugging Face.
 
 
 
