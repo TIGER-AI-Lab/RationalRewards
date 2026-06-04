@@ -57,7 +57,7 @@
 - **test-time optimization** through a Generate-Critique-Refine loop without parameter updates. 
 
 ## News
-- **[Coming Soon]** working on releasing FlowFactory with RationalRewards support on other diffusion RL approaches
+- **[2026/05]** RationalRewards is supported in the Flow RL Framework: [FlowFactory](https://github.com/X-GenGroup/Flow-Factory)
 - **[2026/04/16]** 🚀 RationalRewards **hits #2** on [Hugging Face Daily Papers](https://huggingface.co/papers/2604.11626)!
 - **[2026/04/13]** Paper preprint released on arXiv: [arXiv:2604.11626](https://arxiv.org/abs/2604.11626).
 - **[2026/04]** RationalRewards code release: SFT, reward-model evaluation, diffusion RL with RationalRewards, and test-time prompt tuning.
